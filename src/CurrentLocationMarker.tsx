@@ -1,6 +1,8 @@
+import { Fab } from "@mui/material";
 import { LocationEvent } from "leaflet";
 import { useEffect, useState } from "react";
 import { CircleMarker, useMapEvents } from "react-leaflet";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
 
 export const CurrentLocationMarker = () => {
   const [locationEvent, setLocationEvent] = useState<LocationEvent>();
@@ -26,6 +28,15 @@ export const CurrentLocationMarker = () => {
       {locationEvent && (
         <CircleMarker center={locationEvent.latlng} radius={2} />
       )}
+      <Fab
+        color="primary"
+        size="small"
+        sx={{ position: "absolute", bottom: 25, left: 10 }}
+        disabled={!locationEvent}
+        onClick={() => locationEvent && map.flyTo(locationEvent?.latlng)}
+      >
+        <MyLocationIcon />
+      </Fab>
     </>
   );
 };

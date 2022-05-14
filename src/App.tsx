@@ -72,6 +72,7 @@ function App() {
   return (
     <div>
       {isLoading && <LinearProgress />}
+
       <select
         style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}
         value={display}
