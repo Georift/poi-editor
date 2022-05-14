@@ -19,6 +19,7 @@ import * as R from "ramda";
 import * as turf from "@turf/turf";
 import { useMemo, useState } from "react";
 import { CurrentLocationMarker } from "./CurrentLocationMarker";
+import { MenuItem, Select } from "@mui/material";
 
 const isPostOffice = (obj: any) =>
   obj.properties.type === "PO" || obj.properties.amenity === "post_office";
@@ -73,18 +74,19 @@ function App() {
     <div>
       {isLoading && <LinearProgress />}
 
-      <select
-        style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}
+      <Select
+        sx={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}
         value={display}
         onChange={(e) => setDisplay((e as any).target.value)}
       >
-        <option value="post_office">Post Office</option>
-        <option value="post_box">Post Box</option>
-      </select>
+        <MenuItem value="post_office">Post Office</MenuItem>
+        <MenuItem value="post_box">Post Box</MenuItem>
+      </Select>
       <MapContainer
         center={[-32.0499, 115.8086]}
         zoom={15}
         style={{ height: "100vh", width: "100wv" }}
+        zoomControl={false}
       >
         <TileLayer
           attribution={
