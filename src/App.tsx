@@ -165,41 +165,44 @@ function App() {
           />
 
           {osmQueryData &&
-            osmQueryData.features.map((f, i) => {
-              const foundIcon = R.toPairs(f.properties || {})
-                .map(([key, value]) => `${key}/${value}`)
-                .map((k) => presetDefaults[k])
-                .filter(
-                  (o) =>
-                    typeof o === "object" &&
-                    o !== null &&
-                    typeof o.icon === "string" &&
-                    o.icon.startsWith("maki-")
-                );
+            osmQueryData.features
+              .filter((f) => f?.properties?.highway !== "crossing")
+              .map((f, i) => {
+                const foundIcon = R.toPairs(f.properties || {})
+                  .map(([key, value]) => `${key}/${value}`)
+                  .map((k) => presetDefaults[k])
+                  .filter(
+                    (o) =>
+                      typeof o === "object" &&
+                      o !== null &&
+                      typeof o.icon === "string" &&
+                      (o.icon.startsWith("maki-") ||
+                        o.icon.startsWith("temaki-") ||
+                        o.icon.startsWith("fas-"))
+                  )
+                  .map((s) => s.icon)
+                  .map((s) => (s.startsWith("maki-") ? s + "-15" : s));
 
-              return (
-                <DivIconMarker
-                  key={i}
-                  marker={{
-                    position: [...f.geometry.coordinates].reverse() as any,
-                  }}
-                  container={{ tagName: "svg" }}
-                  divIconProps={{
-                    className: "leaflet-id-icon",
-                    iconSize: [18, 24],
-                    iconAnchor: [9, 25],
-                  }}
-                >
-                  <IDMapMarker
-                    iconId={
-                      foundIcon.length > 0
-                        ? `${foundIcon[0].icon}-15`
-                        : undefined
-                    }
-                  />
-                </DivIconMarker>
-              );
-            })}
+                return (
+                  <DivIconMarker
+                    key={i}
+                    marker={{
+                      position: [...f.geometry.coordinates].reverse() as any,
+                      eventHandlers: {
+                        click: () => console.log(f),
+                      },
+                    }}
+                    container={{ tagName: "svg" }}
+                    divIconProps={{
+                      className: "leaflet-id-icon",
+                      iconSize: [18, 24],
+                      iconAnchor: [9, 25],
+                    }}
+                  >
+                    <IDMapMarker iconId={foundIcon[0]} />
+                  </DivIconMarker>
+                );
+              })}
 
           <CurrentLocationMarker />
 
