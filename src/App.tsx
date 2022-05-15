@@ -11,7 +11,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import * as R from "ramda";
 
 import * as turf from "@turf/turf";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CurrentLocationMarker } from "./CurrentLocationMarker";
 import {
   CircularProgress,
@@ -31,6 +31,39 @@ import { EditModal } from "./EditModal";
 import { Operation, applyPatch } from "fast-json-patch";
 import { featureCollection } from "@turf/turf";
 
+// TODO: fix this typing
+import * as osmauth from "osm-auth";
+const { osmAuth } = osmauth as any;
+
+const DEV_MODE = true;
+
+const PROD_API = "https://api.openstreetmap.org";
+const DEV_API = "https://master.apis.dev.openstreetmap.org";
+
+const DEV_OAUTH = {
+  client_id: "BVQH_lZQ1uEYlF6PplpVDmqVP0QD0RnbQdhR1ZkeFxY",
+  client_secret: "wS0o1OBKJ_EFmEN0HGdemTf-Vds-7aAjVKFPQgGAJGw",
+};
+
+const API_URL = DEV_MODE ? DEV_API : PROD_API;
+
+const redirectPath = window.location.origin + window.location.pathname;
+const auth = osmAuth({
+  ...DEV_OAUTH,
+  redirect_uri: redirectPath,
+  scope: "read_prefs write_api write_notes",
+  auto: true,
+  url: DEV_MODE ? DEV_API : "https://openstreetmap.org",
+});
+
+const searchParams = new URLSearchParams(window.location.search);
+
+if (searchParams.has("code")) {
+  // eslint-disable-next-line no-restricted-globals
+  opener && opener.authComplete(window.location.href);
+  window.close();
+}
+
 function App() {
   const [display, setDisplay] = useState<"post_office" | "post_box">(
     "post_office"
@@ -40,11 +73,22 @@ function App() {
   const [editId, setEditId] = useState<string>();
   const [changes, setChanges] = useState<Record<string, Operation[]>>({});
 
+  useEffect(() => {
+    auth.authenticate((err: any, res: any) => {
+      if (err) {
+        // TODO: stylize
+        alert("Sorry we're having trouble logging you in");
+      }
+      console.log(res);
+    });
+  }, []);
+
   const { data: osmQueryData, isLoading: isLoadingOsmApi } = useQuery(
     ["osmDataAgain"],
     () => {
       return fetch(
-        "https://api.openstreetmap.org/api/0.6/map?bbox=115.80551147460938,-32.053326175386076,115.80830097198486,-32.05200764122336",
+        API_URL +
+          "/api/0.6/map?bbox=115.80551147460938,-32.053326175386076,115.80830097198486,-32.05200764122336",
         {
           headers: { Accept: "application/json" },
         }

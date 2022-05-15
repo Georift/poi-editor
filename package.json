@@ -18,7 +18,9 @@
     "@types/react-dom": "^18.0.3",
     "fast-json-patch": "^3.1.1",
     "leaflet": "^1.8.0",
+    "osm-auth": "^2.0.0",
     "osmtogeojson": "^3.0.0-beta.4",
+    "patch-package": "^6.4.7",
     "ramda": "^0.28.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -29,10 +31,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HTTPS=true react-scripts start",
     "build": "CI=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": [
