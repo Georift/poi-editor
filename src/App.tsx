@@ -3,6 +3,8 @@ import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet/dist/leaflet";
 
+import LinearProgress from "@mui/material/LinearProgress";
+
 import {
   CircleMarker,
   MapContainer,
@@ -27,8 +29,11 @@ const isPostBox = (obj: any) =>
   obj.properties.amenity === "post_box";
 
 function App() {
-  const { data: auspostData } = useAuspostLocations();
-  const { data: osmData } = useOSMLocations();
+  const { data: auspostData, isLoading: isLoadingAuspost } =
+    useAuspostLocations();
+  const { data: osmData, isLoading: isLoadingOsm } = useOSMLocations();
+
+  const isLoading = isLoadingAuspost || isLoadingOsm;
 
   const [display, setDisplay] = useState<"post_office" | "post_box">(
     "post_office"
@@ -66,6 +71,7 @@ function App() {
 
   return (
     <div>
+      {isLoading && <LinearProgress />}
       <select
         style={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}
         value={display}

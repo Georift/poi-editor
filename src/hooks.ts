@@ -3,7 +3,6 @@ import osmtogeojson from "osmtogeojson";
 
 import {
   FeatureCollection,
-  featureCollection,
   GeometryObject,
   MultiPoint,
   Point,
@@ -35,7 +34,6 @@ export const useAuspostLocations = () => {
       // this will rarely change, they aren't adding/removing stores that often
       staleTime: ONE_DAY * 7,
       cacheTime: Infinity,
-      placeholderData: featureCollection([]),
     }
   );
 };
@@ -61,7 +59,6 @@ out;`,
     {
       staleTime: ONE_HOUR,
       cacheTime: Infinity,
-      placeholderData: featureCollection([]),
     }
   );
 };
