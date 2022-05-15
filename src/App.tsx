@@ -16,6 +16,7 @@ import * as R from "ramda";
 
 import * as turf from "@turf/turf";
 import { useMemo, useState } from "react";
+import { CurrentLocationMarker } from "./CurrentLocationMarker";
 
 const isPostOffice = (obj: any) =>
   obj.properties.type === "PO" || obj.properties.amenity === "post_office";
@@ -85,6 +86,8 @@ function App() {
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png"
         />
 
+        <CurrentLocationMarker />
+
         {osmData &&
           osmData.features.filter(showFn).map((feature, i) => {
             const latLong = turf
@@ -114,7 +117,7 @@ function App() {
           })}
 
         {auspostData &&
-          auspostData.features.filter(showFn).map((feature: any, i) => {
+          auspostData.features.filter(showFn).map((feature: any, i: number) => {
             const latLong = turf
               .centroid(feature as any)
               .geometry.coordinates.reverse();
