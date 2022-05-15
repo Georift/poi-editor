@@ -1,4 +1,4 @@
-import { Fab } from "@mui/material";
+import { Fab, Tooltip } from "@mui/material";
 import { LocationEvent } from "leaflet";
 import { useEffect, useState } from "react";
 import { CircleMarker, useMapEvents } from "react-leaflet";
@@ -28,15 +28,17 @@ export const CurrentLocationMarker = () => {
       {locationEvent && (
         <CircleMarker center={locationEvent.latlng} radius={2} />
       )}
-      <Fab
-        color="primary"
-        size="small"
-        sx={{ position: "absolute", bottom: 25, left: 10 }}
-        disabled={!locationEvent}
-        onClick={() => locationEvent && map.flyTo(locationEvent?.latlng)}
-      >
-        <MyLocationIcon />
-      </Fab>
+      <Tooltip title="Move to current location" placement="right">
+        <Fab
+          color="primary"
+          size="small"
+          sx={{ position: "absolute", bottom: 25, left: 10 }}
+          disabled={!locationEvent}
+          onClick={() => locationEvent && map.flyTo(locationEvent?.latlng)}
+        >
+          <MyLocationIcon />
+        </Fab>
+      </Tooltip>
     </>
   );
 };

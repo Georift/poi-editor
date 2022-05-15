@@ -1,4 +1,10 @@
-export const IDMapMarker = ({ iconId }: { iconId?: string }) => {
+export const IDMapMarker = ({
+  iconId,
+  changed,
+}: {
+  iconId?: string;
+  changed: boolean;
+}) => {
   return (
     <svg
       style={{
@@ -23,7 +29,25 @@ export const IDMapMarker = ({ iconId }: { iconId?: string }) => {
             xlinkHref={`#${iconId}`}
           ></use>
         )}
+        {/* TODO: style this modified icon better */}
+        {changed && (
+          <g>
+            <circle
+              r="6"
+              fill="red"
+              transform="translate(4, -4)"
+              opacity={0.5}
+            ></circle>
+            <text fill="white" fontSize={9} fontWeight="bold">
+              M
+            </text>
+          </g>
+        )}
       </g>
     </svg>
   );
+};
+
+IDMapMarker.defaultProps = {
+  changed: false,
 };

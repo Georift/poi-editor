@@ -16,6 +16,7 @@
     "@types/ramda": "^0.28.12",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
+    "fast-json-patch": "^3.1.1",
     "leaflet": "^1.8.0",
     "osmtogeojson": "^3.0.0-beta.4",
     "ramda": "^0.28.0",
